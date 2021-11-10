@@ -36,11 +36,13 @@ public class SketchCanvasManager extends SimpleViewManager<SketchCanvas> {
     public static final int COMMAND_DELETE_PATH = 5;
     public static final int COMMAND_SAVE = 6;
     public static final int COMMAND_END_PATH = 7;
+    public static final int COMMAND_SET_ALPHA = 8;
 
     public static SketchCanvas Canvas = null;
 
     private static final String PROPS_LOCAL_SOURCE_IMAGE = "localSourceImage";
     private static final String PROPS_TEXT = "text";
+    private static final String PROPS_ALPHA = "drawAlpha";
 
     @Override
     public String getName() {
@@ -69,6 +71,11 @@ public class SketchCanvasManager extends SimpleViewManager<SketchCanvas> {
         viewContainer.setCanvasText(text);
     }
 
+    @ReactProp(name = PROPS_ALPHA)
+    public void setDrawAlpha(SketchCanvas viewContainer, int alpha) {
+        viewContainer.setAlpha(alpha);
+    }
+
     @Override
     public Map<String,Integer> getCommandsMap() {
         Map<String, Integer> map = new HashMap<>();
@@ -80,6 +87,7 @@ public class SketchCanvasManager extends SimpleViewManager<SketchCanvas> {
         map.put("deletePath", COMMAND_DELETE_PATH);
         map.put("save", COMMAND_SAVE);
         map.put("endPath", COMMAND_END_PATH);
+        map.put("setAlpha", COMMAND_SET_ALPHA);
 
         return map;
     }
@@ -124,6 +132,10 @@ public class SketchCanvasManager extends SimpleViewManager<SketchCanvas> {
             }
             case COMMAND_END_PATH: {
                 view.end();
+                return;
+            }
+            case COMMAND_SET_ALPHA: {
+                view.setAlpha(args.getInt(0));
                 return;
             }
             default:
